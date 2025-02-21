@@ -12,16 +12,19 @@ const csvParser = require("csv-parser");
 const app = express(); // 初始化 Express 应用
 const PORT = process.env.PORT || 5003; // 设置端口
 
-// 修改 CORS 配置
+// 使用 cors 模块修改 CORS 配置
 app.use(
   cors({
-    origin: "https://laughing-palm-tree-r46qq69jvx4gh549p-5173.app.github.dev", // 允许前端的 URL
+    origin: ["https://laughing-palm-tree-r46qq69jvx4gh549p-5173.app.github.dev", "https://fei0108-yin.github.io"], // 允许的前端 URL
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // 允许的 HTTP 方法
     allowedHeaders: ["Content-Type", "Authorization"], // 允许的请求头
+    credentials: true, // 如果需要传递 Cookie 或身份验证信息
   })
 );
+
+// 手动设置 OPTIONS 请求的 CORS 响应头
 app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "https://laughing-palm-tree-r46qq69jvx4gh549p-5173.app.github.dev");
+  res.header("Access-Control-Allow-Origin", req.headers.origin); // 动态设置允许的来源
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.sendStatus(200); // 响应 OK 状态
